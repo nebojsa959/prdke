@@ -18,7 +18,6 @@ public class Test {
 
         String inst = "INSERT INTO test (row_id, bezeichnung) " + " VALUES (?, ?)";
 
-        // we nest every transaction in a try-block to handle exceptions and transaction management
         try (PreparedStatement insert = con.prepareStatement(inst)) {
             insert.setInt(1, 11111);
             insert.setString(2, "test2");

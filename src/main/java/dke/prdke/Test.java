@@ -8,7 +8,7 @@ public class Test {
 
         Connection con = null;
         try {
-            con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "dkepr");
+            con = DriverManager.getConnection("jdbc:postgresql://ec2-54-247-158-179.eu-west-1.compute.amazonaws.com:5432/djp47beps30l4", "angubgjkxdieah", "86e4ba06fe962430207888c4e4352c189139baddb1f19507104f03b47539aa2b");
             con.setAutoCommit(false);
             System.out.println("Connected to the PostgreSQL server successfully.");
         } catch (Exception e) {
@@ -16,11 +16,11 @@ public class Test {
             System.out.println(e.getMessage());
         }
 
-        String inst = "INSERT INTO test (row_id, bezeichnung) " + " VALUES (?, ?)";
+        /**String inst = "INSERT INTO test (row_id, bez) " + " VALUES (?, ?)";
 
         try (PreparedStatement insert = con.prepareStatement(inst)) {
             insert.setInt(1, 11111);
-            insert.setString(2, "test2");
+            insert.setString(2, "aaaa");
             insert.executeUpdate();
 
             con.commit();
@@ -35,7 +35,7 @@ public class Test {
                 System.out.println("Rollback failed - report and ignore");
                 ex.printStackTrace();
             }
-        }
+        }*/
 
         PreparedStatement stmt = null;
         String query = "SELECT * FROM test";
@@ -47,7 +47,7 @@ public class Test {
 
             while (rs.next()) {
                 String row_id = rs.getString("row_id");
-                String bezeichnung = rs.getString("bezeichnung");
+                String bezeichnung = rs.getString("bez");
                 System.out.println(row_id + "  " + bezeichnung);
             }
             rs.close();

@@ -42,6 +42,19 @@ public class CovidCSV {
             System.out.println(e.getMessage());
         }
 
+        Statement selectStmt = null;
+        java.sql.Date dabLastUpdDayDate = null;
+        try {
+            selectStmt = con.createStatement();
+            ResultSet rs = selectStmt.executeQuery("select max(date_) from covid_numerics");
+            while(rs.next())
+            {
+                dabLastUpdDayDate = java.sql.Date.valueOf(rs.getString(1));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         PreparedStatement stmt = null;
         LocalDate date = null;
         try {
@@ -49,7 +62,7 @@ public class CovidCSV {
 
             String url = doc.select("#content > main > div.card.rounded-0.border-0.p-0.mb-5 > div.card-body.rounded-0.border-0.bg-secondary.p-0 > div.row.p-0.m-0.rounded-0.wrapper > section > div.module-content.col-12 > div.clearfix > p > a").text();
 
-            //downloadUsingStream(url,"CovidFaelle.csv");
+            downloadUsingStream(url,"CovidFaelle.csv");
 
             String fileName = "CovidFaelle.csv";
             CSVReader reader = new CSVReader(new FileReader(fileName));
@@ -68,6 +81,7 @@ public class CovidCSV {
             int idxWeeklyInc =Arrays.asList(headers).indexOf("SiebenTageInzidenzFaelle");
 
             String[] columnValues = reader.readNext();
+
             while(!(columnValues[idxTime].equals("01.04.2021 00:00:00"))){
                 columnValues = reader.readNext();
                 columnValues = columnValues[0].split(";");
@@ -89,8 +103,7 @@ public class CovidCSV {
                     int covidCasesWeek = Integer.parseInt(columnValues[idxCasesWeek]);
                     double covidCasesWeekInc = Double.parseDouble(columnValues[idxWeeklyInc]);
 
-                    if (Arrays.asList(new String[]{"Linz(Stadt)", "Wels(Stadt)", "Steyr(Stadt)"}).contains(city) && LocalDate.now(ZoneId.of("Europe/Vienna")).minusDays(2).isEqual(date)) {
-                        System.out.println(date.toString() + " " + city + " " + covidCases + ";");
+                    if (Arrays.asList(new String[]{"Linz(Stadt)", "Wels(Stadt)", "Steyr(Stadt)"}).contains(city) && sqlDate.after(dabLastUpdDayDate)) {
 
                          String inst = "INSERT INTO covid_numerics (date_, location, number_of_residents, number_of_new_cases,number_of_cases_sum,number_of_cases_7days,incidence) " + " VALUES (?,?,?,?,?,?,?)";
 

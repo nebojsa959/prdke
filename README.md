@@ -1,4 +1,4 @@
 # prdke
 Praktikum DKE
 
-This is initial project with basic functionality which is to be further develpoed for the need of the course -> PR Data and Knowledge Engineering.
+Kleines Java-Programm für die Zwecke des PR Data and Knowledge Engineering. Wird verwendet um die aktuelle Daten aus jeweiligen Quellen herunterzuladen. 
